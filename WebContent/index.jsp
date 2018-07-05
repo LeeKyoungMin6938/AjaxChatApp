@@ -18,7 +18,7 @@
 		//ajax 사용. 메시지전송
 		$.ajax({
 			type : "POST",
-			url : "./ChatSubmitServlet",
+			url : "./chatSubmitServlet",
 			data : {
 				//파라미터 이름 : 입력한 값 (var)
 				chatName : chatName,
@@ -57,6 +57,70 @@
 			alert.hide();			
 		}, delay)
 	}
+	
+	function chatListFunction(type){				
+		$.ajax({
+			type : "POST",
+			url : "./ChatListServlet",
+			data : { //Http요청 후 return 하는 데이터				
+				listType: type,
+			},
+			success: function(data){
+				var parsed = JSON.parse(data);
+				var result = parsed.result;
+				for(var i = 0; i<result.length; i++){
+					addChat(result[i][0].value , result[i][1].value, result[i][2].value);
+				}
+			}
+		});		
+	}
+	
+	function addChat (chatName, chatContent, chatTime){
+		$('#chatList').append('<div calss="row">'+
+					'<div class="col-lg-12">'+
+					'<div class="media">'+
+					'<a class="pull-left" href="#">'+
+					'<img class="media-object img-circle" src="images/fluctuation.png" alt="">'+
+					'</a>'+
+					'<div class="media-body">'+
+					'<h4 class="media-heading">'+
+					chatName+
+					'<span class="small pull-right">'+
+					chatTime+
+					'</span>'+
+					'</h4>'+
+					'<p>'+
+					chatContent +
+					'</p>'+
+					'</div>'+
+					'</div>'+
+					'</div>'+
+					'</div>'+
+					'<hr>'
+				);
+	}
+/* 	<div class="row">
+	<div class="col-lg-12">
+		<p class="text-center textmuted small">2017년 5월 30일</p>
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-lg-12">
+		<div class="media">
+			<a class="pull-left" href="#"> <img
+				class="media-object img-circle" src="images/ratio.png">
+
+			</a>
+			<div class="media-body">
+				<h4 class="media-heading">이경민</h4>
+				<span class="small pull-right">오전 11:03</span>
+			</div>
+			<p>안녕</p>
+		</div>
+	</div>
+</div>
+<hr /> */
 </script>
 <title>JSP AJAX 실시간 익명 채팅 사이트</title>
 </head>
@@ -82,52 +146,16 @@
 				<div class="panel-collapse collapse in" id="chat">
 					<!-- 채팅보여지는부분 -->
 					<div class="portlet-body chat-widget"
-						style="overflow-y: auto; width: auto; height: 300px;">
+						style="overflow-y: auto; width: auto; height: 300px;" id="chatList">
 						<!-- overflow-y:auto 는 y축(높이)가 늘어날 수록 자동으로 스크롤생기면서 늘어남. -->
 						<!-- 맨 위 시간표시 -->
-						<div class="row">
-							<div class="col-lg-12">
-								<p class="text-center textmuted small">2017년 5월 30일</p>
-							</div>
-						</div>
+						
 						<!-- 시간 표시 끝 -->
 
 						<!-- 한명의 사용자가 작성한 채팅 -->
-						<div class="row">
-							<div class="col-lg-12">
-								<div class="media">
-									<a class="pull-left" href="#"> <img
-										class="media-object img-circle" src="images/ratio.png">
-										<!-- 프로필 사진. 원래 누르면 프로필로 들어가야하지만 지금은 #. -->
-									</a>
-									<div class="media-body">
-										<h4 class="media-heading">이경민</h4>
-										<span class="small pull-right">오전 11:03</span>
-									</div>
-									<p>안녕</p>
-								</div>
-							</div>
-						</div>
+						
 						<!-- row 끝 -->
-						<hr />
-
-						<!-- 한명의 사용자가 작성한 채팅 -->
-						<div class="row">
-							<div class="col-lg-12">
-								<div class="media">
-									<a class="pull-left" href="#"> <img
-										class="media-object img-circle" src="images/fluctuation.png">
-									</a>
-									<div class="media-body">
-										<h4 class="media-heading">리경민</h4>
-										<span class="small pull-right">오전 11:05</span>
-									</div>
-									<p>ㅇㅇ ㅎㅇ</p>
-								</div>
-							</div>
-						</div>
-						<!-- row 끝 -->
-
+						
 					</div>
 					<!-- 채팅보여지는부분 끝-->
 
@@ -170,5 +198,6 @@
 			<strong>데이터베이스 오류발생</strong>
 		</div>
 	</div>	
+	<button type="button" class="btn btn-default pull-right" onclick="chatListFunction('today');">추가</button>
 </body>
 </html>
