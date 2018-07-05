@@ -17,7 +17,9 @@ public class ChatDAO {
 			String dbURL = "jdbc:mysql://localhost:3307/ANONYMOUSCHAT";
 			String dbID = "root";
 			String dbPassword = "1234";
+			
 			//Class.forName (즉석김밥),  String str = new String("미리만든김밥");
+			//클래스를 메모리로 로딩한다.
 			Class.forName("com.mysql.jdbc.Driver");
 			conn = DriverManager.getConnection(dbURL,dbID,dbPassword);
 			//여기까지가 db연동.			
@@ -82,4 +84,5 @@ public class ChatDAO {
 	
 	// 여기까지 만들고, mysql-connector-java-5.1.42-bin.jar (jdbc 인터페이스파일) 을 다운받아서, 
 	// WEB-INF 파일 안의 lib 폴더에 복사해준뒤, 파일 오른쪽클릭 -> buildpath 해서 프로젝트에 등록시켜준다.
+	// 등록된파일은 Referenced Libraries 에 등록된다.
 }
