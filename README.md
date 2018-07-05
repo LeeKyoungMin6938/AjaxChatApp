@@ -1,6 +1,8 @@
 # AjaxChatApp
 ajax를 이용한 채팅앱연습
 
+dynamic web project 사용법 익히기. ajax 사용법 익히기. 
+
 나동빈 ajax chat app 연습
 https://www.youtube.com/watch?v=Div5-RHVyaY&index=3&list=PLRx0vPvlEmdAVcSdYgqjJ64A7ggHhorU_
 
