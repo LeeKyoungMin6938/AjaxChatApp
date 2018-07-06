@@ -43,8 +43,15 @@ public class ChatDAO {
 			while(rs.next()) {
 				Chat chat = new Chat();
 				chat.setChatName(rs.getString("chatName"));
-				chat.setChatContent(rs.getString("chatContent"));
-				chat.setChatTime(rs.getString("chatTime"));
+				chat.setChatContent(rs.getString("chatContent").replaceAll(" ", "&nbsp;").replaceAll("<","&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>"));
+				
+				int chatTime = Integer.parseInt(rs.getString("chatTime").substring(11,13));
+				String timeType = "오전";
+				if(Integer.parseInt(rs.getString("chatTime").substring(11,13))>=12) {
+					timeType = "오후";
+					chatTime -= 12;
+				}
+				chat.setChatTime(rs.getString("chatTime").substring(0,11)+" "+ timeType + " " + chatTime + ":" + rs.getString("chatTime").substring(14,16) + " ");
 				chatList.add(chat);
 			}
 		}catch(Exception e) {
