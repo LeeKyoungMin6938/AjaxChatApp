@@ -42,6 +42,47 @@ public class ChatDAO {
 			chatList = new ArrayList<Chat>();
 			while(rs.next()) {
 				Chat chat = new Chat();
+				chat.setChatID(rs.getInt("chatID"));
+				chat.setChatName(rs.getString("chatName"));
+				chat.setChatContent(rs.getString("chatContent").replaceAll(" ", "&nbsp;").replaceAll("<","&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>"));
+				
+				int chatTime = Integer.parseInt(rs.getString("chatTime").substring(11,13));
+				String timeType = "오전";
+				if(Integer.parseInt(rs.getString("chatTime").substring(11,13))>=12) {
+					timeType = "오후";
+					chatTime -= 12;
+				}
+				chat.setChatTime(rs.getString("chatTime").substring(0,11)+" "+ timeType + " " + chatTime + ":" + rs.getString("chatTime").substring(14,16) + " ");
+				chatList.add(chat);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				if(rs != null) rs.close();
+				if(pstmt != null) pstmt.close();
+			}catch(Exception e) {
+				e.printStackTrace();
+			}			
+		}
+		return chatList;
+	}
+	
+	//최근으로 부터 number개만큼의 데이터를 리스트를 가져오는 함수
+	public ArrayList<Chat> getChatListByRecent(int number){
+		ArrayList<Chat> chatList = null;
+		PreparedStatement pstmt = null; //sql 문을 넣을객체
+		ResultSet rs = null; // 결과값 
+		String SQL = "select * from chat where chatID > (select max(chatID) - ? from chat) order by chatTime";
+		
+		try {
+			pstmt = conn.prepareStatement(SQL);
+			pstmt.setInt(1, number);
+			rs = pstmt.executeQuery();
+			chatList = new ArrayList<Chat>();
+			while(rs.next()) {
+				Chat chat = new Chat();
+				chat.setChatID(rs.getInt("chatID"));
 				chat.setChatName(rs.getString("chatName"));
 				chat.setChatContent(rs.getString("chatContent").replaceAll(" ", "&nbsp;").replaceAll("<","&lt;").replaceAll(">", "&gt;").replaceAll("\n", "<br>"));
 				
@@ -70,7 +111,7 @@ public class ChatDAO {
 	public int submit (String chatName, String chatContent) {		
 		PreparedStatement pstmt = null; //sql 문을 넣을객체
 		ResultSet rs = null; // 결과값 
-		String SQL = "insert into chat values (?, ?, now())";		
+		String SQL = "insert into chat values (?, ?, now(), NULL)";		
 		try {
 			pstmt = conn.prepareStatement(SQL);
 			pstmt.setString(1, chatName);

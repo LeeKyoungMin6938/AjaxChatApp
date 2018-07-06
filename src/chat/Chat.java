@@ -4,6 +4,15 @@ public class Chat {
 	String chatName;
 	String chatContent;
 	String chatTime;
+	int chatID;
+	
+	
+	public int getChatID() {
+		return chatID;
+	}
+	public void setChatID(int chatID) {
+		this.chatID = chatID;
+	}
 	public String getChatName() {
 		return chatName;
 	}

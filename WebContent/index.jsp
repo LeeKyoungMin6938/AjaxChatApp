@@ -198,6 +198,7 @@
 			<strong>데이터베이스 오류발생</strong>
 		</div>
 	</div>	
-	<button type="button" class="btn btn-default pull-right" onclick="chatListFunction('today');">추가</button>
+	<button type="button" class="btn btn-default pull-right" onclick="chatListFunction('today');">다가져오기</button>
+	<button type="button" class="btn btn-default pull-right" onclick="chatListFunction('ten');">열개만가져오기</button>
 </body>
 </html>

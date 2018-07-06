@@ -24,6 +24,7 @@ public class ChatListServlet extends HttpServlet {
 		String listType = request.getParameter("listType");
 		if(listType == null || listType.equals("")) response.getWriter().write("");
 		else if(listType.equals("today")) response.getWriter().write(getToday());
+		else if(listType.equals("ten")) response.getWriter().write(getTen());
 	}
 
 	//json 으로
@@ -33,6 +34,24 @@ public class ChatListServlet extends HttpServlet {
 		result.append("{\"result\":[");
 		ChatDAO chatDAO = new ChatDAO(); //데이터베이스 접근객체
 		ArrayList<Chat> chatList = chatDAO.getChatList(new SimpleDateFormat("yyyy-MM-dd").format(new Date())); //현재날짜가 입력이된다.
+		for(int i = 0; i<chatList.size(); i++) {
+			result.append("[{\"value\": \"" + chatList.get(i).getChatName()+"\"},");
+			result.append("{\"value\": \"" + chatList.get(i).getChatContent()+"\"},");
+			result.append("{\"value\": \"" + chatList.get(i).getChatTime()+"\"}]");
+			if(i != chatList.size()-1) result.append(","); // 마지막 메시지가 아니라면, ','를 넣어준다.			
+		}
+		result.append("]}");
+		System.out.println(result.toString());		
+		return result.toString();
+	}
+	
+	
+	//10개까지만 데이터를 가져올것임.
+	public String getTen() {
+		StringBuffer result = new StringBuffer("");
+		result.append("{\"result\":[");
+		ChatDAO chatDAO = new ChatDAO(); //데이터베이스 접근객체
+		ArrayList<Chat> chatList = chatDAO.getChatListByRecent(10);
 		for(int i = 0; i<chatList.size(); i++) {
 			result.append("[{\"value\": \"" + chatList.get(i).getChatName()+"\"},");
 			result.append("{\"value\": \"" + chatList.get(i).getChatContent()+"\"},");
